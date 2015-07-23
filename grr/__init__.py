@@ -93,12 +93,14 @@ class Grr:
             self.shell_exec(['git', 'checkout', 'origin/{0}'.format(branch)])
         except subprocess.CalledProcessError:
             self.out("Checkout failed")
+            sys.exit(1)
 
     def pull(self, branch='master'):
         try:
             self.shell_exec(['git', 'fetch', 'origin'])
         except subprocess.CalledProcessError:
             self.out("Remote not found")
+            sys.exit(1)
         self.checkout(branch)
 
     def review(self, branch='master'):
@@ -107,6 +109,7 @@ class Grr:
             self.shell_exec(['git', 'push', 'gerrit', 'HEAD:refs/for/{0}'.format(branch)])
         except subprocess.CalledProcessError:
             self.out("Push failed")
+            sys.exit(1)
 
     def fetch(self, changeset):
         if ':' in changeset:
