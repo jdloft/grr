@@ -92,7 +92,7 @@ class Grr:
         try:
             self.shell_exec(['git', 'checkout', 'origin/{0}'.format(branch)])
         except subprocess.CalledProcessError:
-            self.out("Branch not found")
+            self.out("Checkout failed")
 
     def pull(self, branch='master'):
         try:
@@ -106,7 +106,7 @@ class Grr:
         try:
             self.shell_exec(['git', 'push', 'gerrit', 'HEAD:refs/for/{0}'.format(branch)])
         except subprocess.CalledProcessError:
-            self.out("Branch not found")
+            self.out("Push failed")
 
     def fetch(self, changeset):
         if ':' in changeset:
