@@ -82,10 +82,9 @@ class Grr:
     def username(self):
         if self._username is None:
             try:
-                username = self.shell_exec(['git', 'config', 'gitreview.username']).strip()
+                username = self.shell_exec(['git', 'config', '--get', 'gitreview.username']).strip()
             except subprocess.CalledProcessError:
                 username = input('Please enter your gerrit username: ').strip()
-                self.shell_exec(['git', 'config', '--get', 'gitreview.username', username])
             self._username = username
         return self._username
 
@@ -129,7 +128,6 @@ class Grr:
         commit_msg = '{username}@{host}:hooks/commit-msg'.format(username=self.username, **self.config)
         self.shell_exec(['scp', '-P' + self.config['port'], commit_msg, '.git/hooks/commit-msg'])
         self.out('Installed commit-msg hook')
-        self.shell_exec(['git', 'checkout', 'origin/master', '-q'])
 
 
 def main():
