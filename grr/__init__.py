@@ -89,15 +89,24 @@ class Grr:
         return self._username
 
     def checkout(self, branch='master'):
-        self.shell_exec(['git', 'checkout', 'origin/{0}'.format(branch)])
+        try:
+            self.shell_exec(['git', 'checkout', 'origin/{0}'.format(branch)])
+        except subprocess.CalledProcessError:
+            self.out("Branch not found")
 
     def pull(self, branch='master'):
-        self.shell_exec(['git', 'fetch', 'origin'])
+        try:
+            self.shell_exec(['git', 'fetch', 'origin'])
+        except subprocess.CalledProcessError:
+            self.out("Remote not found")
         self.checkout(branch)
 
     def review(self, branch='master'):
         self.init_repo()
-        self.shell_exec(['git', 'push', 'gerrit', 'HEAD:refs/for/{0}'.format(branch)])
+        try:
+            self.shell_exec(['git', 'push', 'gerrit', 'HEAD:refs/for/{0}'.format(branch)])
+        except subprocess.CalledProcessError:
+            self.out("Branch not found")
 
     def fetch(self, changeset):
         if ':' in changeset:
